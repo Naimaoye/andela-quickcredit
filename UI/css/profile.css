@@ -1,0 +1,305 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .hh-logo #hh-logo-text {
+    font-size: 1.44rem;
+    font-family: 'proxima_nova_altblack', 'Proxima Nova', sans-serif;
+    font-weight: bolder;
+    margin-top: 30px;
+    margin-left: 20px;
+    display: block;
+    color: #011B33;
+    animation: text-colorchange 45s infinite;
+    /* animation-name followed by duration in seconds*/
+    -webkit-animation: text-colorchange 45s infinite;
+    /* Chrome and Safari */
+  }
+  .hh-logo-sub {
+    font-weight: 500 !important;
+    color: #eb63ff !important;
+  }
+  .container{
+    margin-left: 200px;
+    transition: 0.4s;
+  }
+  
+  .container .top-bar{
+  width: 100%;
+  height: 60px;
+  background-color:#f5f1ee;
+  padding-top: 15px;
+  padding-left: 5px;
+  }
+  .container .top-bar .open-btn{
+    visibility: hidden;
+  }
+  .container .top-bar .logout-btn{
+    position: fixed;
+    right: 20px;
+    top: 14px;
+    background: #d112ee;
+  }
+  .container .top-bar .logout-btn:hover{
+    border: 2px solid #011B33;
+    background: #ad3cbe;
+  }
+  .container .top-bar a{
+    display: block;
+    height: 30px;
+    border: 1px solid #eee;
+    width: 100px;
+    background-color:#f5f1ee;
+    color:#fff;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+    padding: 3px;
+    border-radius: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+  .top-bar .open-btn span{
+  width: 30px;
+  height: 4px;
+  display: block;
+  background-color:#2e5266;
+  margin-top: 5px;
+  }
+  
+  .top-bar p{
+    color: #011B33;
+    font-size: 18px;
+    margin-left: 40px;
+    margin-top: -20px;
+    font-weight: 600;
+    letter-spacing: .5px;
+  }
+  .top-bar .user{
+    color: #011B33;
+    float: right;
+    margin-right: 180px;
+    font-weight: 300;
+    font-style: italic;
+  }
+  .container .side-bar{
+    position: fixed;
+    width: 200px;
+    z-index: 1;
+    height: 100%;
+    background: rgba(3, 1, 29, 0.7);
+    top: 0;
+    left: 0;
+    color: white;
+    font-weight: 700;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    transition: 0.4s;
+  }
+  
+  .side-bar ul{
+    list-style: none;
+    margin-top: 60px;
+    
+  }
+  
+  .side-bar ul a{
+    display: block;
+    color: white;
+    height: 45px;
+    width: auto;
+    text-decoration: none;
+    padding-left: 20px;
+    padding-top: 13px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 16px;
+  }
+  
+  .side-bar ul a:hover{
+    background-color: rgba(3, 1, 29, 0.8);
+    }
+  
+  
+  .side-bar .colse-btn{
+    position: absolute;
+    right: 10px;
+    top: 0px;
+    font-size: 30px;
+    cursor: pointer;
+  }
+  
+  
+  .container .content-display{
+    padding-left: 5px;
+    position: fixed;
+    height: 100%;
+    background-color: #ffffff;
+    width: 100%;
+    overflow-y: scroll;
+  }
+
+  #main input[type="text"],#main input[type="password"],#main input[type="number"]{
+    border: none;
+    border-bottom: 1px solid #011B33;
+    background: transparent;
+    height: 40px;
+    color: #011B33;
+    font-size: 16px;
+  }
+  #main{
+        margin-top: 40px;
+        display: -webkit-flex; /* Safari */
+        -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center !important;
+  }
+  #main input{
+    margin: 5px 25px 5px 25px;
+    display: block;
+  }
+  #main button{
+    margin: 5px 25px 5px 25px;
+    display: block;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        width: 100%;
+        color: #fff;
+        background: rgba(3, 1, 29, 0.8);
+        cursor: pointer;
+  }
+  #main button:hover{
+    color: #f5f1ee;
+    background: #441135;
+  }
+  .photo{
+      height: 300px;
+      width: 250px;
+      background: rgb(204, 195, 195);
+      margin: 40px 50px 5px 50px;
+  }
+  #main-main{
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+    display: flex;
+    flex-wrap: wrap; 
+  }
+  .main1 .photo-in{
+      margin: 15px 20px 10px 20px;
+      height: 200px;
+      width: 300px;
+      background: url(../image/user2.png);
+      background-repeat: no-repeat;
+      background-size: contain;
+  }
+  .main1 button{
+    margin: 5px 15px 5px 15px;
+    display: block;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        width: 90%;
+        color: #fff;
+        background: rgba(3, 1, 29, 0.8);
+        cursor: pointer;
+  }
+  .main1 button:hover{
+    background: rgba(91, 8, 112, 0.8);
+  }
+  @media only screen and (max-width: 768px) {
+    .container .side-bar{
+        position: fixed;
+        width: 0;
+        z-index: 1;
+        height: 100%;
+        background: rgba(3, 1, 29, 0.5);
+        top: 0;
+        left: 0;
+        color: white;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        transition: 0.4s;
+    }
+  
+    .container{
+        margin-left: 0;
+    }
+    .container .top-bar .open-btn{
+        visibility: visible;
+    }
+    .top-bar p{
+        color: #011B33;
+        font-size: 18px;
+        margin-left: 40px;
+    }
+    .side-bar ul a:hover{
+        background-color: rgba(3, 1, 29, 0.8);
+     }
+     #main-main{
+         margin-bottom: 390px !important;
+     }
+  }
+
+
+  @media screen and (max-width: 468px) {
+
+  #main button{
+      margin: 5px 10px 5px 10px;
+      display: inline-block;
+        margin-top: 20px;
+        border: none;
+        outline: none;
+        height: 40px;
+        font-size: 16px;
+        font-weight: bold;
+        width: 70%;
+        color: #fff;
+        background: rgba(3, 1, 29, 0.8);
+        cursor: pointer;
+  }
+  #main{
+    margin-top: 10px;
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center !important;
+}
+.photo{
+    height: 300px;
+    width: 250px;
+    background: rgb(204, 195, 195);
+    margin: 20px 20px 5px 20px;
+}
+#main-main{
+    margin-left: 20px;
+    margin-right: 20px;
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+    display: flex;
+    flex-wrap: wrap; 
+    margin-bottom: 80px;
+  }
+  .main1 .photo-in{
+    margin: 15px 20px 10px 20px;
+    height: 150px;
+    width: 150px;
+    background: url(../image/user2.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.photo{
+    height: 250px;
+    width: 200px;
+    background: rgb(204, 195, 195);
+    margin: 40px 50px 5px 50px;
+}
+}
