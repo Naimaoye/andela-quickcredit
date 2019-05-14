@@ -3,9 +3,7 @@ import Usercontroller from '../controller/users_controller';
 import Loancontroller from '../controller/loans_controller';
 import Repaymentcontroller from '../controller/repayments_controller';
 import Validator from '../middle_ware/validate';
-import Authenticate from '../middle_ware/authenticate';
 import Authorize from '../middle_ware/authorize';
-//import middleware from '../middle_ware/middleware';
 
 const {
   usersValidator,
@@ -13,9 +11,14 @@ const {
   loanApprovalValidator,
   loanValidator,
   loanQueryValidator,
-  loanRepaymentValidator
+  loanRepaymentValidator,
+  userId
 } = Validator
 
+const { 
+  verifyUser,
+  verifyAdmin
+   } = Authorize
 
 const {
     createUsers,
@@ -23,34 +26,53 @@ const {
     adminVerifyUser
 } = Usercontroller
 
+const {
+    applyForLoan,
+    loanApproval,
+    getAllLoans,
+    getSpecificLoan
+} = Loancontroller
+
+const {
+    postRepayment,
+    getRepaymentHistory,
+} = Repaymentcontroller
+
 const route = (app) => {
-    app.get('/api/v1/users', Usercontroller.getUsers);
+     //sign up a user
+    app.post('/api/v1/auth/signup',usersValidator, createUsers);
+     
+     //sign in a user
+    app.post('/api/v1/auth/signin',loginValidator, loginUser);
 
-    app.post('/api/v1/auth/signup',usersValidator,createUsers);
+     //apply for loan
+    app.post('/api/v1/loans', verifyUser, loanValidator, applyForLoan);
 
-    app.post('/api/v1/auth/signin',loginValidator, Usercontroller.loginUser);
+    //admin post repayment
+    app.post('/api/v1/loans/:id/repayment', verifyAdmin, loanRepaymentValidator, userId, postRepayment);
 
-    app.post('/api/v1/loans',loanValidator, Loancontroller.applyForLoan);
+    //admin verify user
+    app.patch('/api/v1/users/:email/verify', verifyAdmin, adminVerifyUser);
+    
+    //admin accept or reject loan
+    app.patch('/api/v1/loans/:id', verifyAdmin, loanApprovalValidator, userId, loanApproval);
 
-    app.post('/api/v1/loans/:id/repayment',loanRepaymentValidator ,Repaymentcontroller.postRepayment);
+     //admin get all loan repayment history
+    app.get('/api/v1/loans/:id/repayments', verifyUser, userId, getRepaymentHistory);
+     
+     //admin get all loan applications
+    app.get('/api/v1/loans', verifyAdmin, loanQueryValidator, getAllLoans);
 
-    app.patch('/api/v1/users/:email/verify' ,Usercontroller.adminVerifyUser);
+    //admin get all loans that has been approved but not repaid
+    app.get('/api/v1/loans?status=approved&repaid=false',loanQueryValidator, getAllLoans);
 
-    app.patch('/api/v1/loans/:id', Loancontroller.loanApproval);
+    app.get('/api/v1/loans?status=approved&repaid=true',loanQueryValidator, getAllLoans);
 
-    app.get('/api/v1/loans/:id/repayments', Repaymentcontroller.getRepaymentHistory);
-
-    app.get('/api/v1/loans', Loancontroller.getAllLoans);
-
-    app.get('/api/v1/loans?status=approved&repaid=false', Loancontroller.getAllLoans);
-
-    app.get('/api/v1/loans?status=approved&repaid=true', Loancontroller.getAllLoans);
-
-    app.get('/api/v1/loans/:id', Loancontroller.getSpecificLoan);
+    //admin get all specific application
+    app.get('/api/v1/loans/:id', verifyAdmin, userId, getSpecificLoan);
 };
 
 
 
 export default route;
-// module.exports = route;
-//userValidator.validateSignup,
+ 
