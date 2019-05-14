@@ -7,8 +7,7 @@ import server from '../server/app';
 chai.should();
 chai.use(chaiHttp);
 
- 
-let token;
+let currentToken;
 
 describe('Test loan repayment', () => {
   describe('POST /api/v1/loans/1/repayment', () => {
@@ -22,10 +21,9 @@ describe('Test loan repayment', () => {
         .post('/api/v1/auth/signin')
         .send(adminLogin)
         .end((loginErr, loginRes) => {
-          token = loginRes.body.data.token;
-          
+      currentToken = `Bearer ${loginRes.body.data.token}`;
+          done();
         });
-        done();
     });
     it('should return all loan applications', (done) => {
       chai
@@ -36,8 +34,9 @@ describe('Test loan repayment', () => {
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
+          res.body.data.should.have.property('paidAmount');
         });
-      done();
+       done();
     });
   });
 });
