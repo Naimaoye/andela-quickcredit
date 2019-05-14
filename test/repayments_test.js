@@ -7,6 +7,7 @@ import server from '../server/app';
 chai.should();
 chai.use(chaiHttp);
 
+
 let currentToken;
 
 describe('Test loan repayment', () => {
