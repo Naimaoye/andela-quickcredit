@@ -1,99 +1,144 @@
 import users from '../models/userss';
+import bcrypt from 'bcryptjs';
+import Auth from '../middle_ware/authenticate';
 
-class userController {
+class Usercontroller {
     //get all the users
     static getUsers(req, res) {
-    	try{
-    		return res.status(200).json({
+      try{
+        return res.status(200).json({
               message: 'All users successfully gotten',
               users,
               status: 200
-    		});
-    	}catch(e){
-    		return res.status(500).json({
-    			message: 'An error occured',
-    			error: 'unknown error'
-    		});
-    	}
+        });
+      }catch(e){
+        return res.status(500).json({
+          message: 'An error occured',
+        });
+      }
         
     }
 
-    static createUsers(req, res) {
-    	//authentication should come in here
-    const {
-      email, firstName, lastName, password, address,
-    } = req.body;
-    try {
-    const newUser = {
+static createUsers(req, res) {
+
+   const {
+     email, firstName, lastName, address,
+     } = req.body;
+
+     let password;
+     const token = Auth.generateToken({
+             email,
+             isAdmin
+         });
+
+    bcrypt.hash(req.body.password, 10, (err,hash) =>{
+      if(err){
+        return res.status(500).json({
+          error: err,
+        })
+      }else{
+   const newUser = {
     id: users.length + 1,
-    email,
-    firstName,
-    lastName,
-    password,
-    address,
+    token,
+    ...req.body,
+    password: hash,
     status: 'unverified',
     isAdmin: false,
     registered: new Date(),
   };
 
-  if(true) {
-  	for (const user of users) {
-  		console.log(user.email);
-  		if (user.email === email) {
-  		res.status(422).send({ error: 'email has been used' });
-  	   return;
-  }
-}
-}
-   users.push(newUser);
+   const emailExists = users.find(user => user.email === email);
+  if (emailExists) {
+      return res.status(409).json({
+        status: 409,
+        error: 'User already exist',
+      });
+    }
+
+  users.push(newUser);
   return res.status(201).json({
    message: 'successfully created a user',
    status: 201,
-   users,
+   newUser,
    });
-  }catch(e){
-     return res.status(422).send({
-        status: 422,
-        message: 'an error ocurred',
-        error: 'unknown error',
+      }
     })
- }
-
+    
+}
  
-  }
-  		
-
+  
     static loginUser(req, res) {
 
      const { email, password } = req.body;
     // checks if user exists
-    const userExists = users.find(user => user.email === email);
-    
-    if (!userExists) {
-      return res.status(400).json({
-        status: 400,
-        error: 'Invalid email',
+    const emailExists = users.find(user => user.email === email);
+
+    if(!emailExists && !Authenticator.comparePassword(emailExists.password, password)
+     || !emailExists && Authenticator.comparePassword(emailExists.password, password)
+     || emailExists && !Authenticator.comparePassword(emailExists.password, password)){
+      return res.status(401).json({
+        status: 401,
+        error: 'Auth failed',
       });
     }
-    const {
-      id, firstName, lastName, isAdmin,
-    } = userExists;
      
       return res.status(200).json({
       status: 200,
       data: {
-        token,
-        id,
-        firstName,
-        lastName,
-        isAdmin,
-        email: userExists.email,
+        token: emailExists.token,
+        id: emailExists.id,
+        firstName: emailExists.firstName,
+        lastName: emailExists.lastName,
+        isAdmin: emailExists.isAdmin,
+        email: emailExists.email,
       },
     });
 
     }
 
+    static adminVerifyUser(req, res) {
+
+    const { email } = req.params;
+    const usersdata = users.find(user => user.email === email);
+    
+    if (!usersdata) {
+      return res.status(404).send({
+        status: 404,
+        error: 'User not found!',
+      });
+    }
+
+    if (usersdata.status === 'verified') {
+      return res.status(409).json({
+        status: 409,
+        message: 'User has been verified',
+      });
+    }
+     if(usersdata.status === 'not verified'){
+      return res.status(404).json({
+        status: 404,
+        message: 'User has not been verified',
+      });
+     }
+
+    usersdata.status = 'verified';
+    const changedData = {
+      email: usersdata.email,
+      firstName: usersdata.firstName,
+      lastName: usersdata.lastName,
+      password: usersdata.password,
+      address: usersdata.address,
+      status: usersdata.status,
+      isAdmin: usersdata.isAdmin,
+    };
+    return res.status(200).json({
+      status: 200,
+      data: changedData,
+    });
+
+}
+
 
 }
 // module.exports = userController;
-export default userController;
+export default Usercontroller;

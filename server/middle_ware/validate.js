@@ -1,10 +1,10 @@
 import Joi from 'joi';
 
-class Validator {
-
-  static usersValidator(users) {
-    const schema = Joi.object().keys({
+const usersValidator = (req, res, next) => {
+  const schema = 
+Joi.object().keys({
       email: Joi.string()
+        .trim()
         .email()
         .required(),
       firstName: Joi.string()
@@ -16,7 +16,6 @@ class Validator {
         .min(3)
         .required(),
       password: Joi.string()
-        .regex(/^[a-zA-Z0-9]{3,30}$/)
         .min(7)
         .alphanum()
         .required(),
@@ -24,72 +23,154 @@ class Validator {
       status: Joi.string()
         .insensitive()
         .default('unverified'),
-      isAdmin: Joi.boolean().default(false),
+      isAdmin: Joi.boolean().default(false)
+  });
 
-    });
-    return Joi.validate(users, schema);
+return Joi.validate(req.body, schema, (error, result) =>{
+  if(error){
+    res.status(400).send(error.details[0].message);
+    return;
   }
+next();
+});
 
- static loginValidator(loginData) {
-      const schema = Joi.object().keys({
-      email: Joi.string().email().trim().lowercase()
-        .required(),
-      password: Joi.string().min(7).required().strict(),
-    });
-    return Joi.validate(loginData, schema);
-  }
-
-static loanValidator(loan) {
-    const schema = Joi.object().keys({
-      email: Joi.string()
-        .email()
-        .required(),
-      firstName: Joi.string()
-        .regex(/^[A-Z]|[a-z]+$/)
-        .min(3)
-        .required(),
-      lastName: Joi.string()
-        .regex(/^[A-Z]|[a-z]+$/)
-        .min(3)
-        .required(),
-      tenor: Joi.number()
-        .integer()
-        .min(1)
-        .max(12)
-        .required(),
-      amount: Joi.number().min(10000).required(),
-    });
-    return Joi.validate(loan, schema);
-  }
+ }
   
-  static loanApprovalValidator(loan) {
-    const schema = Joi.object().keys({
-      status: Joi.string()
-        .insensitive()
-        .valid('approved', 'rejected')
-        .required(),
-    });
-    return Joi.validate(loan, schema);
-  }
 
-  static loanRepaymentValidator(repayment) {
-    const schema = Joi.object().keys({
-      paidAmount: Joi.number().required(),
+const loginValidator =  (req, res, next) => {
+       const schema = 
+       Joi.object().keys({
+      email: Joi.string()
+          .email()
+          .trim()
+          .lowercase()
+          .required(),
+      password: Joi.string()
+          .min(7)
+          .required()
+          .strict(),
     });
-    return Joi.validate(repayment, schema);
+  return Joi.validate(req.body, schema, (error, result) =>{
+  if(error){
+    res.status(400).send(error.details[0].message);
+    return;
   }
-
- static loanQueryValidator(loan) {
-    const schema = Joi.object().keys({
-      status: Joi.string()
-        .insensitive()
-        .valid('approved'),
-      repaid: Joi.boolean()
-        .insensitive()
-        .valid(true, false),
-    });
-    return Joi.validate(loan, schema);
-  }
+next();
+});
 
 }
-export default Validator;
+
+const loanApprovalValidator = (req, res, next) => { 
+        const schema = 
+           Joi.object().keys({
+           status: Joi.string()
+                .insensitive()
+                .valid('approved', 'rejected')
+                .required(),
+    });
+  return Joi.validate(req.body, schema, (error, result) =>{
+  console.log(error);
+  console.log(result);
+  if(error){
+    res.status(400).send(error.details[0].message);
+    return;
+  }
+next();
+});
+         
+}
+
+const loanValidator = (req, res, next) => { 
+    const schema =
+        Joi.object().keys({
+        email: Joi.string()
+            .email()
+            .required(),
+       firstName: Joi.string()
+            .regex(/^[A-Z]|[a-z]+$/)
+            .min(3)
+            .required(),
+       lastName: Joi.string()
+            .regex(/^[A-Z]|[a-z]+$/)
+            .min(3)
+            .required(),
+       tenor: Joi.number()
+            .integer()
+            .min(1)
+            .max(12)
+            .required(),
+       amount: Joi.number().min(10000).required(),
+    });
+   return Joi.validate(req.body, schema, (error, result) =>{
+    if(error){
+    res.status(400).send(error.details[0].message);
+    return;
+   }
+next();
+});
+
+}        
+
+const loanQueryValidator = (req, res, next) => { 
+     const schema =
+         Joi.object().keys({
+         status: Joi.string()
+            .insensitive()
+            .valid('approved'),
+      repaid: Joi.boolean()
+           .insensitive()
+           .valid(true, false),
+    });
+   return Joi.validate(req.body, schema, (error, result) =>{
+    if(error){
+    res.status(400).send(error.details[0].message);
+    return;
+   }
+next();
+});
+
+}
+
+const userId = (req, res, next) => {
+  const schema = 
+  Joi.object().keys({
+    id: Joi.number()
+      .required(),
+  });
+ return Joi.validate(req.body.id, schema, (error, result) =>{
+   console.log(error);
+   console.log(result);
+    if(error){
+    res.status(400).send(error.details[0].message);
+    return;
+   }
+next();
+});
+};
+
+
+const loanRepaymentValidator = (req, res, next) => {
+     const schema = 
+    Joi.object().keys({
+      paidAmount: Joi.number().required(),
+    });
+    return Joi.validate(req.body, schema, (error, result) =>{
+    if(error){
+    res.status(400).send(error.details[0].message);
+    return;
+   }
+next();
+});
+
+}
+
+module.exports = {
+  usersValidator,
+  loginValidator,
+  loanApprovalValidator,
+  loanValidator,
+  loanQueryValidator,
+  loanRepaymentValidator,
+  userId
+}
+ 

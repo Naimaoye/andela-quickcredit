@@ -1,53 +1,53 @@
 import Authenticate from './authenticate';
 
-const { verifyToken } = Authenticate;
 
 class Authorize {
 
 static verifyUser(req, res, next) {
     try {
-      const tokenGen = req.headers.authorization.split(' ')[1];
-      const decode = verifyToken(tokenGen);
+      const token = req.headers.authorization.split(' ')[1];
+      const decoded =  Authenticate.verifyToken(token);
+      const userType = decoded.payload.isAdmin;
 
-      if (!decode.payload.id) {
+      if (userType === false) {
         return res.status(403).send({
           status: 403,
-          error: 'Only users with valid authentication can access this page',
+          error: 'You do not have access to this route',
         });
       }
       return next();
-    } catch (error) {
+    } catch (e) {
       return res.status(401).send({
         status: 401,
-        error: 'Invalid token',
+        error: 'Invalid input',
       });
     }
   }
 
-
-
- static verifyAdmin(req, res, next) {
+  static verifyAdmin(req, res, next) {
     try {
-    	const tokenGen = req.headers.authorization.split(' ')[1];
-        const decode = verifyToken(tokenGen);
+      const token = req.headers.authorization.split(' ')[1];
+      const decoded =  Authenticate.verifyToken(token);
+      const userType = decoded.payload.isAdmin;
 
-        if (decode.payload.isAdmin === false) {
+      if (userType === true) {
         return res.status(403).send({
           status: 403,
-          error: 'you do not have the authorization to access this page',
+          error: 'You cannot access this route',
         });
       }
-
       return next();
-    } 
-    catch (error) {
+
+    } catch (e) {
       return res.status(401).send({
         status: 401,
-        error: 'Invalid token',
+        error: 'Invalid input',
       });
     }
   }
 
-
+  
 }
+
+
 export default Authorize;
