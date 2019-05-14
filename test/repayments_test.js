@@ -1,4 +1,3 @@
-
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import supertest from 'supertest';
@@ -7,8 +6,7 @@ import server from '../server/app';
 chai.should();
 chai.use(chaiHttp);
 
-
-let currentToken;
+let token;
 
 describe('Test loan repayment', () => {
   describe('POST /api/v1/loans/1/repayment', () => {
@@ -22,7 +20,7 @@ describe('Test loan repayment', () => {
         .post('/api/v1/auth/signin')
         .send(adminLogin)
         .end((loginErr, loginRes) => {
-      currentToken = `Bearer ${loginRes.body.data.token}`;
+          currentToken = `Bearer ${loginRes.body.data.token}`;
           done();
         });
     });
@@ -36,9 +34,8 @@ describe('Test loan repayment', () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.data.should.have.property('paidAmount');
+          done();
         });
-       done();
     });
   });
 });
-
